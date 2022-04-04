@@ -1,6 +1,7 @@
 import express from "express";
 
 const app = express()
+app.use(express.json())
 
 const books = [
     {id: 1, "titulo": "Senhor dos Aneis"},
@@ -14,5 +15,25 @@ app.get('/', (req, res) => {
 app.get('/livros', (req, res) => {
     res.status(200).json(books)
 })
+
+app.get('/livros/:id', (req, res) => {
+    let index = getBook(req.params.id)
+    res.json(books[index])
+})
+
+app.post('/livros', (req, res) => {
+    books.push(req.body)
+    res.status(201).send('Livro cadastrado com sucesso')
+})
+
+app.put('/livros/:id', (req, res) => {
+    let index = getBook(req.params.id)
+    books[index].titulo = req.body.titulo
+    res.json(books)
+})
+
+function getBook(id) {
+    return books.findIndex(book => book.id == id)
+}
 
 export default app
