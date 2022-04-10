@@ -12,7 +12,6 @@ class LivroController {
 
     static listBookById = (req, res) => {
         const id = req.params.id
-
         livros.findById(id)
             .populate('autor', 'nome')
             .exec((err, livros) => {
@@ -22,6 +21,13 @@ class LivroController {
                     res.status(200).send(livros)
                 }
             })
+    }
+
+    static listBooksByPublisher = (req, res) => {
+        const editora = req.query.editora
+        livros.find({'editora': editora}, {}, (err, livros) => {
+                res.status(200).send(livros)
+        })
     }
 
     static registerBook = (req, res) => {
@@ -58,6 +64,7 @@ class LivroController {
             }
         })
     }
+
 }
 
 export default LivroController
